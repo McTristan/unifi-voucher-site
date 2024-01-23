@@ -144,6 +144,11 @@ app.get('/voucher', async (req, res) => {
     });
 });
 app.get('/vouchers', async (req, res) => {
+    if (req.query.code !== (process.env.SECURITY_CODE || "0000")) {
+        res.status(403).send();
+        return;
+    }
+
     const vouchers = await unifi.getExistingVouchers();
 
     res.render('existing_vouchers', {
